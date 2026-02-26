@@ -1,783 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deepanshu Malik - AI Portfolio</title>
+    <title>Deepanshu Malik — AI Engineer · LLMs · Document Intelligence</title>
+
+    <!-- SEO -->
+    <meta name="description"
+        content="Portfolio of Deepanshu Malik — AI Engineer specialising in LLM systems, document intelligence, RAG pipelines, and full-stack development with FastAPI, React, and AWS.">
+    <meta name="author" content="Deepanshu Malik">
+    <meta name="keywords"
+        content="AI Engineer, LLM, RAG, Gemini, FastAPI, Python, React, Document Intelligence, Deepanshu Malik">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Deepanshu Malik — AI Engineer & Full-Stack Developer">
+    <meta property="og:description"
+        content="Production-ready GenAI systems • LLM Applications • Document Intelligence • RAG Chatbots">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deepanshumalik.dev">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Three.js (CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            overflow-x: hidden;
-            transition: all 0.3s ease;
-        }
-
-        body.dark-theme {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        }
-
-        /* Glassmorphism Navigation */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 1000;
-            padding: 1rem 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { filter: drop-shadow(0 0 5px rgba(0, 245, 255, 0.5)); }
-            to { filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.5)); }
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .theme-toggle {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(180deg);
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 2rem;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff, #ffff00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textShine 3s ease-in-out infinite;
-        }
-
-        @keyframes textShine {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(180deg); }
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* AI Assistant */
-        .ai-assistant {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
-        }
-
-        .ai-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: float 3s ease-in-out infinite;
-            position: relative;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .ai-avatar:hover {
-            transform: scale(1.1) translateY(-5px);
-        }
-
-        .ai-avatar.listening {
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .ai-avatar.speaking {
-            animation: speaking 0.5s ease-in-out infinite;
-        }
-
-        @keyframes speaking {
-            0%, 100% { border-radius: 50%; }
-            50% { border-radius: 30%; }
-        }
-
-        .status-indicator {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #00ff00;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-
-        .mic-icon {
-            font-size: 2rem;
-            color: white;
-        }
-
-        /* Sections */
-        .section {
-            min-height: 100vh;
-            padding: 5rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* About Section */
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .about-image {
-            text-align: center;
-        }
-
-        .avatar-image {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            padding: 5px;
-            animation: rotate 10s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .avatar-inner {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23667eea"/><circle cx="40" cy="40" r="5" fill="white"/><circle cx="60" cy="40" r="5" fill="white"/><path d="M35 65 Q50 75 65 65" stroke="white" stroke-width="3" fill="none"/></svg>') center/cover;
-        }
-
-        .about-text {
-            font-size: 1.2rem;
-            line-height: 1.8;
-        }
-
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .skill-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .skill-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Projects Section */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Virtual Meeting Room */
-        .meeting-room {
-            height: 500px;
-            border-radius: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            position: relative;
-            margin: 2rem 0;
-        }
-
-        #three-container {
-            width: 100%;
-            height: 100%;
-        }
-
-        .meeting-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* Voice Visualizer */
-        .voice-visualizer {
-            position: fixed;
-            bottom: 120px;
-            right: 2rem;
-            width: 200px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .wave {
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            margin: 0 2px;
-            border-radius: 2px;
-            animation: wave 1s ease-in-out infinite;
-        }
-
-        .wave:nth-child(2) { animation-delay: 0.1s; }
-        .wave:nth-child(3) { animation-delay: 0.2s; }
-        .wave:nth-child(4) { animation-delay: 0.3s; }
-        .wave:nth-child(5) { animation-delay: 0.4s; }
-
-        @keyframes wave {
-            0%, 100% { transform: scaleY(0.3); }
-            50% { transform: scaleY(1); }
-        }
-
-        /* Welcome Modal */
-        .welcome-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .modal-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 3rem;
-            text-align: center;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .modal-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #00f5ff, #ff00ff);
-            margin: 0 auto 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            animation: modalPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes modalPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Contact Form */
-        .contact-form {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1rem;
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.2rem; }
-            .about-content { grid-template-columns: 1fr; text-align: center; }
-            .nav-links { display: none; }
-            .ai-assistant { bottom: 1rem; right: 1rem; }
-            .ai-avatar { width: 60px; height: 60px; }
-            .meeting-room { height: 300px; }
-        }
-
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .slide-up {
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Permission Modal */
-        .permission-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .permission-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 3rem;
-            text-align: center;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8) translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .permission-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        .permission-steps {
-            text-align: left;
-            margin: 2rem 0;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .permission-steps ol {
-            margin: 0;
-            padding-left: 1.5rem;
-        }
-
-        .permission-steps li {
-            margin: 0.5rem 0;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Notification System */
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 2rem;
-            max-width: 350px;
-            padding: 1rem 1.5rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 1500;
-            animation: slideInRight 0.3s ease-out;
-            cursor: pointer;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .notification.error {
-            background: rgba(255, 59, 48, 0.2);
-            border-color: rgba(255, 59, 48, 0.4);
-        }
-
-        .notification.warning {
-            background: rgba(255, 149, 0, 0.2);
-            border-color: rgba(255, 149, 0, 0.4);
-        }
-
-        .notification.ai-response {
-            background: rgba(0, 245, 255, 0.15);
-            border-color: rgba(0, 245, 255, 0.3);
-            max-width: 400px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        .notification.success {
-            background: rgba(52, 199, 89, 0.2);
-            border-color: rgba(52, 199, 89, 0.4);
-        }
-
-        .notification.info {
-            background: rgba(0, 122, 255, 0.2);
-            border-color: rgba(0, 122, 255, 0.4);
-        }
-
-        .notification-close {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            opacity: 0.7;
-        }
-
-        .notification-close:hover {
-            opacity: 1;
-        }
-
-        /* Fallback Chat Interface */
-        .chat-fallback {
-            position: fixed;
-            bottom: 120px;
-            right: 2rem;
-            width: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: none;
-            flex-direction: column;
-            max-height: 400px;
-            z-index: 1000;
-        }
-
-        .chat-header {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            max-height: 250px;
-        }
-
-        .chat-input-container {
-            padding: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-input {
-            width: 100%;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .chat-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .chat-message {
-            margin: 0.5rem 0;
-            padding: 0.5rem;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        .chat-message.ai {
-            background: rgba(0, 245, 255, 0.2);
-            margin-left: 0;
-            margin-right: 2rem;
-        }
-
-        .chat-message.user {
-            background: rgba(255, 255, 255, 0.2);
-            margin-left: 2rem;
-            margin-right: 0;
-            text-align: right;
-        }
-    </style>
 </head>
-<body>
-    <!-- Navigation -->
+
+<body class="dark-theme">
+
+    <!-- ── Navigation ──────────────────────────────────────────────────────── -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">DM.AI</div>
+
             <ul class="nav-links">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
                 <li><a href="#projects" class="nav-link">Projects</a></li>
                 <li><a href="#meeting" class="nav-link">Meet Me</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+            <div style="display:flex;align-items:center;gap:1rem;">
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">☀️</button>
+                <button class="hamburger" id="hamburger" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <!-- Welcome Modal -->
-    <div class="welcome-modal" id="welcomeModal">
-        <div class="modal-content">
-            <div class="modal-avatar">🤖</div>
-            <h2>Welcome to My AI Portfolio!</h2>
-            <p>Hi! I'm Deepanshu's AI assistant. I'll guide you through this interactive experience.</p>
-            <button class="btn btn-primary" onclick="startIntroduction()">Start Experience</button>
+    <!-- ── Welcome Modal ───────────────────────────────────────────────────── -->
+    <div class="welcome-modal" id="welcomeModal" role="dialog" aria-modal="true">
+        <div class="modal-content welcome-modal-content">
+
+            <!-- Animated orb -->
+            <div class="welcome-orb">
+                <div class="orb-ring"></div>
+                <div class="orb-inner">🤖</div>
+            </div>
+
+            <p class="welcome-eyebrow">AI-Powered Portfolio</p>
+            <h2 class="welcome-headline">Hello, I'm Deepanshu's<br>AI Assistant 👋</h2>
+            <p class="welcome-desc">I can guide you through this interactive portfolio — answering questions about
+                skills, projects, and experience via <strong>voice</strong> or <strong>text chat</strong>.</p>
+
+            <div class="welcome-features">
+                <div class="welcome-feature">🎤 Voice Commands</div>
+                <div class="welcome-feature">💬 Text Chat</div>
+                <div class="welcome-feature">🌐 3D Avatar</div>
+            </div>
+
+            <button class="btn btn-primary welcome-cta" onclick="startIntroduction()">
+                Start Experience &nbsp;→
+            </button>
+
+            <p class="welcome-skip" onclick="startIntroduction()">Skip intro</p>
         </div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- ── Hero ────────────────────────────────────────────────────────────── -->
     <section class="hero" id="home">
         <div class="hero-content">
+            <p class="hero-tagline">AI Engineer · LLMs · Document Intelligence · Full-Stack</p>
             <h1>Deepanshu Malik</h1>
-            <p>AI Engineer & Full-Stack Developer</p>
-            <p>Building the future with intelligent solutions</p>
+            <p>Building production-ready GenAI systems that solve real-world problems</p>
+
+
             <div class="cta-buttons">
-                <a href="#about" class="btn btn-primary">Explore My Work</a>
-                <a href="#meeting" class="btn btn-secondary">Meet My Avatar</a>
+                <a href="#projects" class="btn btn-primary">View Projects</a>
+                <a href="#experience" class="btn btn-secondary">Work Experience</a>
                 <button class="btn btn-secondary" onclick="startVoiceInteraction()">🎤 Voice Chat</button>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- ── About ───────────────────────────────────────────────────────────── -->
     <section class="section" id="about">
         <div class="container">
             <h2 class="section-title">About Me</h2>
@@ -788,115 +109,268 @@
                     </div>
                 </div>
                 <div class="about-text">
-                    <p>I'm a passionate AI Engineer and Full-Stack Developer with expertise in machine learning, natural language processing, and modern web technologies. I love creating intelligent solutions that solve real-world problems.</p>
+                    <p>I'm an <strong>AI Engineer</strong> specialising in <strong>LLM systems, document intelligence,
+                            and scalable ML platforms</strong>. I've built production-ready Generative AI applications
+                        that power real-world workflows — from automated solar proposal generation to social media
+                        content automation.</p>
                     <br>
-                    <p>My journey in technology spans across various domains including computer vision, voice recognition, and interactive web experiences. I believe in the power of AI to transform how we interact with technology.</p>
+                    <p>At <strong>Wattmonk Technologies</strong>, I engineered end-to-end AI pipelines using
+                        <strong>Gemini Vision/Text</strong>, achieving 85–95% structured data extraction accuracy across
+                        diverse utility bill formats, and reduced manual content creation effort by 80% with an LLM
+                        automation agent.
+                    </p>
                     <br>
-                    <p>When I'm not coding, you'll find me exploring the latest AI research, contributing to open-source projects, or Collaborating with fellow budding developers to build skills and share knowledge.</p>
+                    <p>My technical foundation spans <strong>FastAPI, Docker, AWS, RAG architectures, Prompt
+                            Engineering, and full-stack development</strong> with React and Node.js. I hold
+                        certifications from AWS, Cisco, and Infosys, and I'm continuously pushing the frontier of
+                        applied AI.</p>
                     <br>
-                    <button class="btn btn-primary" onclick="downloadResume()">📄 Download Resume</button>
+                    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="downloadResume()">📄 Download Resume</button>
+                        <a href="mailto:malikdeepanshu15@gmail.com" class="btn btn-secondary">✉️ Email Me</a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Skills Section -->
+    <!-- ── Skills ──────────────────────────────────────────────────────────── -->
     <section class="section" id="skills">
         <div class="container">
-            <h2 class="section-title">My Skills</h2>
+            <h2 class="section-title">Technical Skills</h2>
             <div class="skills-grid">
+
                 <div class="skill-card">
-                    <div class="skill-icon">🤖</div>
-                    <h3>Artificial Intelligence</h3>
-                    <p>Machine Learning, Deep Learning, NLP, Computer Vision</p>
+                    <div class="skill-icon">🧠</div>
+                    <h3>GenAI &amp; LLMs</h3>
+                    <p>Building intelligent pipelines with large language models and retrieval systems</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Gemini Vision/Text</span>
+                        <span class="skill-tag">RAG</span>
+                        <span class="skill-tag">Prompt Engineering</span>
+                        <span class="skill-tag">AI Agents</span>
+                        <span class="skill-tag">Pinecone</span>
+                    </div>
                 </div>
+
                 <div class="skill-card">
-                    <div class="skill-icon">💻</div>
-                    <h3>Full-Stack Development</h3>
-                    <p>React, Node.js, Python, MongoDB, PostgreSQL</p>
+                    <div class="skill-icon">📊</div>
+                    <h3>Machine Learning</h3>
+                    <p>Classical ML, model evaluation, explainability, and healthcare AI</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Scikit-learn</span>
+                        <span class="skill-tag">XGBoost</span>
+                        <span class="skill-tag">TabNet</span>
+                        <span class="skill-tag">Random Forest</span>
+                        <span class="skill-tag">SHAP / LIME</span>
+                    </div>
                 </div>
+
                 <div class="skill-card">
-                    <div class="skill-icon">☁️</div>
-                    <h3>Cloud & DevOps</h3>
-                    <p>AWS, Docker, Kubernetes, CI/CD</p>
+                    <div class="skill-icon">⚙️</div>
+                    <h3>Backend</h3>
+                    <p>Scalable async APIs and microservices for AI-powered products</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Express.js</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">REST APIs</span>
+                    </div>
                 </div>
+
                 <div class="skill-card">
                     <div class="skill-icon">🎨</div>
-                    <h3>UI/UX Design</h3>
-                    <p>Figma, Adobe XD, Responsive Design</p>
+                    <h3>Frontend</h3>
+                    <p>Modern, responsive UIs with real-time AI integration</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">React.js</span>
+                        <span class="skill-tag">Next.js</span>
+                        <span class="skill-tag">Tailwind CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                    </div>
                 </div>
+
                 <div class="skill-card">
-                    <div class="skill-icon">🗣️</div>
-                    <h3>Voice Technology</h3>
-                    <p>Speech Recognition, TTS, Voice UI</p>
+                    <div class="skill-icon">☁️</div>
+                    <h3>Cloud &amp; DevOps</h3>
+                    <p>Containerised deployments and cloud infrastructure management</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">AWS (EC2, S3, IAM)</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Linux</span>
+                        <span class="skill-tag">CI/CD</span>
+                    </div>
                 </div>
+
                 <div class="skill-card">
-                    <div class="skill-icon">🌐</div>
-                    <h3>3D Web Graphics</h3>
-                    <p>Three.js, WebGL, Interactive 3D</p>
+                    <div class="skill-icon">🗄️</div>
+                    <h3>Databases &amp; Tools</h3>
+                    <p>Data storage, versioning, and API testing workflows</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Git / GitHub</span>
+                        <span class="skill-tag">Postman</span>
+                        <span class="skill-tag">JWT</span>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
+    <!-- ── Work Experience ─────────────────────────────────────────────────── -->
+    <section class="section" id="experience">
+        <div class="container">
+            <h2 class="section-title">Work Experience</h2>
+            <div class="work-grid">
+
+                <div class="work-card">
+                    <div class="work-header">
+                        <div>
+                            <div class="work-role">AI Engineer Intern</div>
+                            <div class="work-company">
+                                <a href="https://www.wattmonk.com" target="_blank" rel="noopener">Wattmonk
+                                    Technologies</a>
+                                &nbsp;· Ghaziabad, India (Remote)
+                            </div>
+                        </div>
+                        <span class="work-date">Oct 2025 – Jan 2026</span>
+                    </div>
+
+                    <div class="work-projects">
+
+                        <!-- Project 1 -->
+                        <div class="work-project">
+                            <div class="work-project-header">
+                                <span class="work-project-title">📱 Social Media Post Generation Agent</span>
+                                <a href="https://postmaker.framesense.ai" target="_blank" rel="noopener"
+                                    class="live-badge">● LIVE</a>
+                            </div>
+                            <ul class="work-bullets">
+                                <li>Engineered end-to-end LLM-powered automation system using Gemini 2.0 Flash, reducing
+                                    manual content creation effort by <strong>80%</strong>.</li>
+                                <li>Designed structured prompt orchestration workflows with validation pipelines and
+                                    response filtering for high-quality, consistent outputs.</li>
+                                <li>Developed React + Tailwind visual editor with real-time preview and AI-assisted
+                                    content refinement.</li>
+                                <li>Optimised API interactions, reducing response latency by <strong>25%</strong> and
+                                    improving token efficiency.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div class="work-project">
+                            <div class="work-project-header">
+                                <span class="work-project-title">⚡ Utility Bill Agent — Document Intelligence + Solar
+                                    Proposal</span>
+                                <a href="https://solaragenthub.com" target="_blank" rel="noopener" class="live-badge">●
+                                    LIVE</a>
+                            </div>
+                            <ul class="work-bullets">
+                                <li>Engineered AI-powered document intelligence pipeline using Gemini Vision, achieving
+                                    <strong>85–95%</strong> structured data extraction accuracy across diverse utility
+                                    bill formats.
+                                </li>
+                                <li>Architected multi-stage fallback parsing (Vision + Regex + heuristic rules),
+                                    improving parsing success rate by <strong>40%</strong>.</li>
+                                <li>Integrated Nominatim and NREL PVWatts APIs to automate solar ROI modelling, energy
+                                    output estimation, and payback analysis.</li>
+                                <li>Designed scalable FastAPI + MongoDB backend with async task pipelines handling
+                                    <strong>100+ document requests/day</strong>.
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Projects ────────────────────────────────────────────────────────── -->
     <section class="section" id="projects">
         <div class="container">
             <h2 class="section-title">Featured Projects</h2>
             <div class="projects-grid">
+
+                <!-- Project 1 -->
                 <div class="project-card">
-                    <h3>🤖 AI Chatbot Platform</h3>
-                    <p>A comprehensive chatbot platform with NLP capabilities, supporting multiple languages and voice interaction.</p>
+                    <h3>⚡ Utility Bill AI Agent <span class="live-badge">● LIVE</span></h3>
+                    <p>AI-powered document intelligence pipeline extracting structured data from utility bills with
+                        85–95% accuracy, auto-generating solar ROI proposals with payback analysis via NREL PVWatts API.
+                    </p>
                     <div class="project-tech">
-                        <span>Python</span> <span>TensorFlow</span> <span>React</span>
+                        <span>Gemini
+                            Vision</span><span>FastAPI</span><span>MongoDB</span><span>Docker</span><span>AWS</span><span>Nominatim</span><span>NREL
+                            PVWatts</span>
                     </div>
-                </div>
-                <!--<div class="project-card">
-                    <h3>🏠 </h3>
-                    <p>IoT-based smart home solution with voice control and AI-powered automation.</p>
-                    <div class="project-tech">
-                        <span>IoT</span> <span>Voice AI</span> <span>Node.js</span>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>📊 Data Visualization Dashboard</h3>
-                    <p>Interactive dashboard for real-time data analysis with predictive analytics capabilities.</p>
-                    <div class="project-tech">
-                        <span>D3.js</span> <span>Machine Learning</span> <span>MongoDB</span>
-                    </div>
-                </div>-->
-                <div class="project-card">
-                    <h3>📧 Voice-Based Email System</h3>
-                    <p>Developed a system enabling visually impaired users to send and receive emails using voice commands. </p>
-                    <div class="project-tech">
-                        <span>Python</span> <span>Flask</span> <span>Speech Recognition</span> <span>Text-to-Speech</span>
+                    <div class="project-links">
+                        <a href="https://solaragenthub.com" target="_blank" rel="noopener"
+                            class="project-link-btn btn-live">🔗 Live Demo</a>
+                        <a href="https://github.com/deepanshuj18/utility-bill-agent" target="_blank" rel="noopener"
+                            class="project-link-btn btn-github">⭐ GitHub</a>
                     </div>
                 </div>
 
+                <!-- Project 2 -->
                 <div class="project-card">
-                    <h3>🎓 Event Management System for College</h3>
-                <p>Web application to streamline campus event planning, registration, and ticket booking. </p>
-                <div class="project-tech">
-                    <span>React.js</span> <span>Node.js</span> <span>Express.js</span> <span>MongoDB</span> <span>Figma</span>
-                </div>
-            </div>
-
-                <!--<div class="project-card">
-                    <h3>🎮 AR/VR Experience</h3>
-                    <p>Immersive AR/VR application for educational content with gesture recognition.</p>
+                    <h3>🤖 AI-Powered RAG Chatbot</h3>
+                    <p>End-to-end Retrieval-Augmented Generation system enabling contextual Q&amp;A over PDF documents.
+                        Gemini embeddings + Pinecone vector search for semantic retrieval with a scalable FastAPI
+                        backend.</p>
                     <div class="project-tech">
-                        <span>Unity</span> <span>Computer Vision</span> <span>WebXR</span>
+                        <span>FastAPI</span><span>Gemini
+                            API</span><span>Pinecone</span><span>PyPDF2</span><span>Python</span>
                     </div>
-                </div>-->
+                    <div class="project-links">
+                        <a href="https://github.com/deepanshuj18/Rag-chatbot-0" target="_blank" rel="noopener"
+                            class="project-link-btn btn-github">⭐ GitHub</a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <h3>🩺 WBC Diagnostic System v2.0</h3>
+                    <p>Full-stack ML healthcare platform for breast cancer prediction using TabNet + MAE. Applied
+                        SHAP/LIME explainability, cross-validation, hyperparameter tuning, and ROC-AUC evaluation.
+                        Containerised with Docker + JWT security.</p>
+                    <div class="project-tech">
+                        <span>TabNet</span><span>FastAPI</span><span>React</span><span>Node.js</span><span>MongoDB</span><span>Docker</span><span>SHAP</span><span>LIME</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/deepanshuj18/wbc-diagnostic-system" target="_blank" rel="noopener"
+                            class="project-link-btn btn-github">⭐ GitHub</a>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card">
+                    <h3>📱 Social Media Post Generation Agent <span class="live-badge">● LIVE</span></h3>
+                    <p>LLM-powered automation system that generates brand-consistent social media content. Structured
+                        prompt orchestration + validation pipeline + React visual editor with real-time AI-assisted
+                        refinement.</p>
+                    <div class="project-tech">
+                        <span>Gemini 2.0 Flash</span><span>FastAPI</span><span>React</span><span>Tailwind
+                            CSS</span><span>Prompt Engineering</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://postmaker.framesense.ai" target="_blank" rel="noopener"
+                            class="project-link-btn btn-live">🔗 Live Demo</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Virtual Meeting Section -->
+    <!-- ── Virtual Meeting ──────────────────────────────────────────────────── -->
     <section class="section" id="meeting">
         <div class="container">
             <h2 class="section-title">Meet My Digital Twin</h2>
-            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">
+            <p style="text-align:center;font-size:1.2rem;margin-bottom:2rem;opacity:0.85;">
                 Interact with my 3D avatar and schedule a meeting!
             </p>
             <div class="meeting-room">
@@ -909,38 +383,106 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="section" id="contact">
+    <!-- ── Certifications ──────────────────────────────────────────────────── -->
+    <section class="section" id="certifications" style="min-height:auto;padding:3rem 2rem;">
         <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-form">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" placeholder="Your Name">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="your.email@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" rows="5" placeholder="Your message..."></textarea>
-                </div>
-                <button class="btn btn-primary" onclick="sendMessageWithFormSubmit()">Send Message</button>
+            <h2 class="section-title" style="font-size:2rem;margin-bottom:2rem;">Certifications &amp; Achievements</h2>
+            <div class="cert-grid">
+                <div class="cert-badge">🏆 AWS Cloud Practitioner</div>
+                <div class="cert-badge">🌐 Linux Essentials — Cisco</div>
+                <div class="cert-badge">🤖 Generative AI — Infosys 2025</div>
+                <div class="cert-badge">📊 AI / ML — Infosys</div>
+                <div class="cert-badge">🏅 Winner — Kabaddi Tournament</div>
+                <div class="cert-badge">🥈 Finalist — College Hackathon 2024</div>
+                <div class="cert-badge">👨‍💻 Led 3-member team · Real-time Chat App</div>
             </div>
         </div>
     </section>
 
-    <!-- AI Assistant -->
+    <!-- ── Contact ──────────────────────────────────────────────────────────── -->
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-layout">
+
+                <!-- Left — contact info + social -->
+                <div class="contact-info-panel">
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon">✉️</div>
+                        <div>
+                            <div class="contact-detail-label">Email</div>
+                            <div class="contact-detail-text">
+                                <a href="mailto:malikdeepanshu15@gmail.com">malikdeepanshu15@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon">📱</div>
+                        <div>
+                            <div class="contact-detail-label">Phone</div>
+                            <div class="contact-detail-text">
+                                <a href="tel:+919220922230">+91 9220922230</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon">📍</div>
+                        <div>
+                            <div class="contact-detail-label">Location</div>
+                            <div class="contact-detail-text">
+                                <span>Noida, India</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social links -->
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/deepanshu-malik-6b3543261/" target="_blank" rel="noopener"
+                            class="social-btn">
+                            💼 LinkedIn
+                        </a>
+                        <a href="https://github.com/deepanshuj18" target="_blank" rel="noopener" class="social-btn">
+                            🐙 GitHub
+                        </a>
+                        <a href="https://www.hackerrank.com/profile/malikdeepanshu15" target="_blank" rel="noopener"
+                            class="social-btn">
+                            💻 HackerRank
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right — message form -->
+                <div class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" rows="5" placeholder="Your message…" required></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="sendMessageWithFormSubmit()">Send Message</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── AI Assistant (floating) ─────────────────────────────────────────── -->
     <div class="ai-assistant">
-        <div class="ai-avatar" id="aiAvatar" onclick="toggleVoiceAssistant()">
+        <div class="ai-avatar" id="aiAvatar" onclick="toggleVoiceAssistant()" role="button"
+            aria-label="Toggle AI voice assistant" tabindex="0">
             <div class="status-indicator"></div>
             <span class="mic-icon">🎤</span>
         </div>
     </div>
 
-    <!-- Voice Visualizer -->
-    <div class="voice-visualizer" id="voiceVisualizer">
+    <!-- ── Voice Visualizer ─────────────────────────────────────────────────── -->
+    <div class="voice-visualizer" id="voiceVisualizer" aria-hidden="true">
         <div class="wave"></div>
         <div class="wave"></div>
         <div class="wave"></div>
@@ -948,24 +490,21 @@
         <div class="wave"></div>
     </div>
 
-    <!-- Permission Modal -->
-    <div class="permission-modal" id="permissionModal">
+    <!-- ── Permission Modal ─────────────────────────────────────────────────── -->
+    <div class="permission-modal" id="permissionModal" role="dialog" aria-modal="true">
         <div class="permission-content">
             <div class="permission-icon">🎤</div>
             <h2>Microphone Permission Required</h2>
             <p>To use voice features, please allow microphone access.</p>
             <div class="permission-steps">
                 <ol>
-                    <li>Look for the microphone icon 🎤 in your browser's address bar</li>
+                    <li>Look for the 🎤 icon in your browser's address bar</li>
                     <li>Click it and select "Always allow" for this site</li>
                     <li>Refresh the page and try again</li>
                     <li>Or use the text chat option below</li>
                 </ol>
-                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
-                    Note: This website runs in a sandboxed environment. Voice features work best when you grant permission directly through your browser.
-                </p>
             </div>
-            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+            <div style="display:flex;gap:1rem;justify-content:center;margin-top:2rem;">
                 <button class="btn btn-primary" onclick="retryVoicePermission()">Try Again</button>
                 <button class="btn btn-secondary" onclick="useChatFallback()">Use Text Chat</button>
                 <button class="btn btn-secondary" onclick="closePermissionModal()">Close</button>
@@ -973,1006 +512,25 @@
         </div>
     </div>
 
-    <!-- Chat Fallback -->
-    <div class="chat-fallback" id="chatFallback">
+    <!-- ── Chat Fallback ────────────────────────────────────────────────────── -->
+    <div class="chat-fallback" id="chatFallback" role="complementary" aria-label="AI text chat">
         <div class="chat-header">
             <span>💬 AI Assistant</span>
-            <button onclick="closeChatFallback()" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
+            <button onclick="closeChatFallback()"
+                style="background:none;border:none;color:white;cursor:pointer;font-size:1.2rem;">✕</button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="chat-message ai">Hi! I'm your AI assistant. Ask me anything about Deepanshu's work!</div>
+            <div class="chat-message ai">Hi! Ask me about Deepanshu's skills, projects, or experience!</div>
         </div>
         <div class="chat-input-container">
-            <input type="text" class="chat-input" placeholder="Type your question..." id="chatInput" onkeypress="handleChatInput(event)">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your question…"
+                onkeypress="handleChatInput(event)" aria-label="Chat message input">
         </div>
     </div>
 
-    <script>
-        // Global Variables
-        let scene, camera, renderer, avatar;
-        let recognition, synthesis;
-        let isListening = false;
-        let isSpeaking = false;
-        let currentLanguage = 'en-US';
-        let voiceSupported = false;
-        let speechSupported = false;
-        let permissionGranted = false;
+    <!-- ── Scripts ──────────────────────────────────────────────────────────── -->
+    <script src="js/main.js"></script>
 
-        // Knowledge Base
-        const knowledgeBase = {
-            "what are your skills": "I specialize in AI engineering, full-stack development, cloud technologies, and voice interfaces. I work with Python, JavaScript, React, machine learning frameworks, and 3D web graphics.",
-            "show me your resume": "I'll download my resume for you right now!",
-            "book a meeting": "I'd love to schedule a meeting with you! Let me open the meeting scheduler.",
-            "tell me about yourself": "I'm Deepanshu Malik, an AI engineer passionate about creating intelligent solutions. I love working with machine learning, voice technology, and interactive web experiences.",
-            "what projects have you worked on": "I've built AI chatbots, smart home assistants, data visualization dashboards, and AR/VR experiences. Each project combines cutting-edge technology with practical solutions.",
-            "how can I contact you": "You can reach me through the contact form, schedule a meeting with my avatar, or use voice commands to interact with me!",
-            "what technologies do you use": "I work with Python, TensorFlow, React, Node.js, Three.js, AWS, Docker, and many other modern technologies.",
-            "hello": "Hello! Welcome to my AI-powered portfolio. How can I help you today?",
-            "hi": "Hi there! I'm excited to show you around my portfolio. What would you like to know?",
-            "help": "I can help you navigate my portfolio, tell you about my skills, show you projects, or schedule a meeting. Just ask me anything!"
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            checkVoiceSupport();
-            initVoiceRecognition();
-            initThreeJS();
-            setupNavigation();
-            showWelcomeModal();
-            
-            // Add scroll animations
-            observeElements();
-        });
-
-        function checkVoiceSupport() {
-            // Check Speech Recognition support
-            voiceSupported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
-            
-            // Check Speech Synthesis support
-            speechSupported = 'speechSynthesis' in window;
-            
-            // Update AI avatar based on support
-            updateAIAvatar();
-            
-            console.log('Voice Recognition Support:', voiceSupported);
-            console.log('Speech Synthesis Support:', speechSupported);
-        }
-
-        function updateAIAvatar() {
-            const avatar = document.getElementById('aiAvatar');
-            const micIcon = avatar.querySelector('.mic-icon');
-            
-            if (!voiceSupported && !speechSupported) {
-                micIcon.textContent = '💬'; // Chat icon if no voice support
-                avatar.title = 'Click for text chat (Voice not supported)';
-            } else if (!permissionGranted) {
-                micIcon.textContent = '🎤'; // Microphone icon
-                avatar.title = 'Click to enable voice chat';
-            } else {
-                micIcon.textContent = '🎤'; // Microphone icon
-                avatar.title = 'Voice chat enabled - Click to talk';
-            }
-        }
-
-        // Welcome Modal and Introduction
-        function showWelcomeModal() {
-            const modal = document.getElementById('welcomeModal');
-            modal.style.display = 'flex';
-        }
-
-        function startIntroduction() {
-            const modal = document.getElementById('welcomeModal');
-            modal.style.display = 'none';
-            
-            setTimeout(() => {
-                const welcomeText = "Welcome to Deepanshu Malik's AI-powered portfolio! I'm your AI assistant. You can interact with me using voice commands or text chat. Try asking 'What are your skills' or 'Show me your projects'!";
-                speakText(welcomeText);
-            }, 500);
-        }
-
-        // Voice Recognition Setup
-        function initVoiceRecognition() {
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = currentLanguage;
-
-                recognition.onstart = function() {
-                    isListening = true;
-                    updateAIStatus('listening');
-                    showVoiceVisualizer();
-                };
-
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript.toLowerCase();
-                    processVoiceCommand(transcript);
-                };
-
-                recognition.onerror = function(event) {
-                    console.error('Speech recognition error:', event.error);
-                    handleSpeechError(event.error);
-                    updateAIStatus('ready');
-                    hideVoiceVisualizer();
-                };
-
-                recognition.onend = function() {
-                    isListening = false;
-                    updateAIStatus('ready');
-                    hideVoiceVisualizer();
-                };
-            } else {
-                showVoiceNotSupported();
-            }
-
-            // Text-to-Speech
-            if ('speechSynthesis' in window) {
-                synthesis = window.speechSynthesis;
-            }
-        }
-
-        function handleSpeechError(error) {
-            let message = '';
-            switch(error) {
-                case 'not-allowed':
-                    message = "Microphone access is required for voice features. Please allow microphone access in your browser settings or use text chat instead.";
-                    showPermissionModal();
-                    break;
-                case 'no-speech':
-                    message = "No speech detected. Please try again or use text chat.";
-                    setTimeout(() => showChatInterface(), 2000);
-                    break;
-                case 'audio-capture':
-                    message = "No microphone found. Please check your microphone connection or use text chat.";
-                    setTimeout(() => showChatInterface(), 2000);
-                    break;
-                case 'network':
-                    message = "Network error occurred. Please check your internet connection or use text chat.";
-                    setTimeout(() => showChatInterface(), 2000);
-                    break;
-                default:
-                    message = "Voice recognition unavailable. Switching to text chat mode.";
-                    setTimeout(() => showChatInterface(), 1000);
-            }
-            
-            showNotification(message, 'error');
-        }
-
-        function showVoiceNotSupported() {
-            showNotification("Voice recognition is not supported in this browser. Please use Chrome, Edge, or Safari for voice features.", 'warning');
-        }
-
-        function processVoiceCommand(command) {
-            console.log('Voice command:', command);
-            
-            // Navigation commands
-            if (command.includes('go to') || command.includes('show me')) {
-                if (command.includes('about') || command.includes('skills')) {
-                    scrollToSection('about');
-                    speakText("Here's information about my background and skills.");
-                } else if (command.includes('projects') || command.includes('work')) {
-                    scrollToSection('projects');
-                    speakText("These are some of my featured projects.");
-                } else if (command.includes('contact') || command.includes('get in touch')) {
-                    scrollToSection('contact');
-                    speakText("Here's how you can get in touch with me.");
-                } else if (command.includes('meeting') || command.includes('avatar')) {
-                    scrollToSection('meeting');
-                    speakText("Meet my digital twin! You can interact with my 3D avatar here.");
-                }
-                return;
-            }
-
-            // Download resume command
-            if (command.includes('download') && command.includes('resume')) {
-                downloadResume();
-                speakText("I'm downloading my resume for you now!");
-                return;
-            }
-
-            // Meeting booking
-            if (command.includes('book') || command.includes('schedule') || command.includes('meeting')) {
-                scheduleMeeting();
-                speakText("I'd love to schedule a meeting with you! Let me open the scheduler.");
-                return;
-            }
-
-            // Theme toggle
-            if (command.includes('dark') || command.includes('light') || command.includes('theme')) {
-                toggleTheme();
-                speakText("I've switched the theme for you!");
-                return;
-            }
-
-            // Knowledge base responses
-            const response = findBestMatch(command);
-            if (response) {
-                speakText(response);
-            } else {
-                speakText("I'm not sure about that. You can ask me about my skills, projects, or schedule a meeting. Try saying 'What are your skills' or 'Tell me about yourself'.");
-            }
-        }
-
-        function findBestMatch(input) {
-            const keys = Object.keys(knowledgeBase);
-            for (let key of keys) {
-                if (input.includes(key) || key.includes(input.split(' ')[0])) {
-                    return knowledgeBase[key];
-                }
-            }
-            return null;
-        }
-
-        function speakText(text) {
-            if (!synthesis) return;
-            
-            isSpeaking = true;
-            updateAIStatus('speaking');
-            
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.9;
-            utterance.pitch = 1;
-            utterance.volume = 0.8;
-            
-            utterance.onend = function() {
-                isSpeaking = false;
-                updateAIStatus('ready');
-            };
-            
-            synthesis.speak(utterance);
-        }
-
-        // AI Assistant Functions
-        function toggleVoiceAssistant() {
-            if (isListening) {
-                recognition.stop();
-            } else if (!isSpeaking) {
-                startVoiceInteraction();
-            }
-        }
-
-        function startVoiceInteraction() {
-            if (!voiceSupported) {
-                showChatInterface();
-                showNotification("Voice recognition not supported. Using text chat instead.", 'info');
-                return;
-            }
-
-            if (!recognition) {
-                showChatInterface();
-                showNotification("Speech recognition unavailable. Using text chat.", 'warning');
-                return;
-            }
-
-            if (!isListening && !isSpeaking) {
-                try {
-                    // Try to start recognition directly without explicit permission request
-                    recognition.start();
-                    showNotification("Voice recognition started! Speak now.", 'success');
-                    permissionGranted = true;
-                    updateAIAvatar();
-                } catch (error) {
-                    console.error('Recognition start error:', error);
-                    handleVoiceStartError(error);
-                }
-            }
-        }
-
-        function handleVoiceStartError(error) {
-            console.error('Voice start error:', error);
-            permissionGranted = false;
-            updateAIAvatar();
-            
-            if (error.name === 'NotAllowedError' || error.message.includes('not-allowed')) {
-                showNotification("Microphone access needed. Please click the microphone icon in your browser's address bar and allow access.", 'warning');
-                showPermissionModal();
-            } else {
-                showChatInterface();
-                showNotification("Voice recognition unavailable. Using text chat instead.", 'info');
-            }
-        }
-
-        function updateAIStatus(status) {
-            const avatar = document.getElementById('aiAvatar');
-            avatar.className = 'ai-avatar ' + status;
-        }
-
-        function showVoiceVisualizer() {
-            document.getElementById('voiceVisualizer').style.display = 'flex';
-        }
-
-        function hideVoiceVisualizer() {
-            document.getElementById('voiceVisualizer').style.display = 'none';
-        }
-
-        // Three.js 3D Avatar Setup
-        function initThreeJS() {
-            const container = document.getElementById('three-container');
-            if (!container) return;
-
-            // Scene setup
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0x000000, 0);
-            container.appendChild(renderer.domElement);
-
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-            scene.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(5, 5, 5);
-            scene.add(directionalLight);
-
-            // Create Avatar
-            createAvatar();
-
-            // Add environment
-            createEnvironment();
-
-            // Camera position
-            camera.position.set(0, 2, 5);
-            camera.lookAt(0, 1, 0);
-
-            // Animation loop
-            animate();
-
-            // Handle resize
-            window.addEventListener('resize', onWindowResize, false);
-        }
-
-        function createAvatar() {
-            // Avatar body
-            const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.7, 2, 8);
-            const bodyMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x4169E1,
-                transparent: true,
-                opacity: 0.8
-            });
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-            body.position.y = 1;
-
-            // Avatar head
-            const headGeometry = new THREE.SphereGeometry(0.4, 16, 16);
-            const headMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0xFFDBB5,
-                transparent: true,
-                opacity: 0.9
-            });
-            const head = new THREE.Mesh(headGeometry, headMaterial);
-            head.position.y = 2.5;
-
-            // Eyes
-            const eyeGeometry = new THREE.SphereGeometry(0.05, 8, 8);
-            const eyeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
-            
-            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-            leftEye.position.set(-0.15, 2.6, 0.3);
-            
-            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-            rightEye.position.set(0.15, 2.6, 0.3);
-
-            // Arms
-            const armGeometry = new THREE.CylinderGeometry(0.1, 0.15, 1.5, 8);
-            const armMaterial = new THREE.MeshPhongMaterial({ color: 0xFFDBB5 });
-            
-            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
-            leftArm.position.set(-0.8, 1.5, 0);
-            leftArm.rotation.z = 0.3;
-            
-            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
-            rightArm.position.set(0.8, 1.5, 0);
-            rightArm.rotation.z = -0.3;
-
-            // Group avatar parts
-            avatar = new THREE.Group();
-            avatar.add(body);
-            avatar.add(head);
-            avatar.add(leftEye);
-            avatar.add(rightEye);
-            avatar.add(leftArm);
-            avatar.add(rightArm);
-            
-            scene.add(avatar);
-        }
-
-        function createEnvironment() {
-            // Floor
-            const floorGeometry = new THREE.PlaneGeometry(20, 20);
-            const floorMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x333333,
-                transparent: true,
-                opacity: 0.7
-            });
-            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-            floor.rotation.x = -Math.PI / 2;
-            scene.add(floor);
-
-            // Background particles
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 500;
-            const posArray = new Float32Array(particlesCount * 3);
-
-            for (let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 50;
-            }
-
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.05,
-                color: 0x00ffff,
-                transparent: true,
-                opacity: 0.6
-            });
-
-            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particlesMesh);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Avatar animation
-            if (avatar) {
-                avatar.rotation.y += 0.005;
-                avatar.children[1].rotation.x = Math.sin(Date.now() * 0.001) * 0.1; // Head nod
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        function onWindowResize() {
-            const container = document.getElementById('three-container');
-            if (!container) return;
-
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
-        }
-
-        // Avatar Interaction
-        function talkToAvatar() {
-            speakText("Hello! I'm Deepanshu's digital twin. I can tell you about his work, skills, and help you schedule a meeting. What would you like to know?");
-            
-            // Avatar wave animation
-            if (avatar) {
-                const leftArm = avatar.children[4];
-                const rightArm = avatar.children[5];
-                
-                // Wave animation
-                const waveAnimation = () => {
-                    leftArm.rotation.z = Math.sin(Date.now() * 0.01) * 0.5 + 0.3;
-                    rightArm.rotation.z = Math.sin(Date.now() * 0.01 + Math.PI) * 0.5 - 0.3;
-                };
-                
-                const animationId = setInterval(waveAnimation, 16);
-                setTimeout(() => clearInterval(animationId), 3000);
-            }
-        }
-
-        // Navigation Functions
-        function setupNavigation() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('.section');
-
-            // Smooth scrolling
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href').substring(1);
-                    scrollToSection(targetId);
-                });
-            });
-
-            // Active section highlighting
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    if (scrollY >= sectionTop - 200) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').substring(1) === current) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-        }
-
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        }
-
-        // Theme Toggle
-        function toggleTheme() {
-            document.body.classList.toggle('dark-theme');
-            const themeButton = document.querySelector('.theme-toggle');
-            const isDark = document.body.classList.contains('dark-theme');
-            themeButton.textContent = isDark ? '☀️' : '🌙';
-        }
-
-        // Utility Functions
-        /*function downloadResume() {
-            // Create a fake resume download
-            const link = document.createElement('a');
-            link.href = 'data:text/plain;charset=utf-8,Deepanshu Malik - AI Engineer Resume\n\nContact: deepanshu@example.com\nSkills: AI, Machine Learning, Full-Stack Development\nExperience: 5+ years in AI and web development';
-            link.download = 'Deepanshu_Malik_Resume.txt';
-            link.click();
-            
-            speakText("Resume downloaded successfully!");
-        }*/ 
-        function downloadResume() {
-    // Show professional message instead of downloading (for now)
-    const message = "Thank you for your interest in my resume! Please feel free to contact me directly via email or LinkedIn for a copy of my detailed resume and to discuss potential opportunities.";
-    
-    // Display the message (you can customize this based on your UI)
-    alert(message);
-    
-    // Optional: Provide audio feedback
-    if (typeof speakText === 'function') {
-        speakText("Please contact me directly for my resume.");
-    }
-    
-    /* 
-    FUTURE DOWNLOAD FUNCTIONALITY - Uncomment when ready to enable downloads:
-    
-    const resumeContent = `
-[YOUR NAME]
-Email: [your-email@example.com]
-Phone: [your-phone-number]
-LinkedIn: [your-linkedin-profile]
-Location: [your-city, state/country]
-
-PROFESSIONAL SUMMARY
-[Write a brief 2-3 sentence summary of your background and career goals]
-
-EXPERIENCE
-[Job Title] | [Company Name] | [Start Date - End Date]
-• [Key achievement or responsibility]
-• [Key achievement or responsibility]
-
-[Previous Job Title] | [Previous Company] | [Start Date - End Date]
-• [Key achievement or responsibility]
-
-EDUCATION
-[Degree] in [Field of Study]
-[University Name] | [Graduation Year]
-
-SKILLS
-Technical Skills: [List your technical skills]
-Tools & Technologies: [List tools you're proficient with]
-
-PROJECTS
-[Project Name] | [Date]
-• [Brief description and technologies used]
-
-CERTIFICATIONS
-• [Certification Name] - [Issuing Organization] ([Year])
-    `.trim();
-
-    const link = document.createElement('a');
-    link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(resumeContent);
-    link.download = '[YOUR_NAME]_Resume.txt';
-    link.click();
-    
-    if (typeof speakText === 'function') {
-        speakText("Resume downloaded successfully!");
-    }
-    */
-}
-
-        /*function scheduleMeeting() {
-            // Open a modal or redirect to scheduling
-            const confirmed = confirm("Would you like to schedule a 30-minute call with Deepanshu? This will open the scheduling interface.");
-            if (confirmed) {
-                // In a real implementation, this would integrate with Calendly or similar
-                window.open('https://calendly.com/deepanshumalik0110/30min', '_blank');
-                speakText("Great! I've opened the scheduling interface for you.");
-            }
-        }*/ 
-        /*function scheduleMeeting() {
-    speakText("Opening the scheduling page for you now!");
-    // Direct redirect - always works
-    setTimeout(() => {
-        window.location.href = 'https://calendly.com/deepanshumalik0110/30min';
-    }, 1000); // Small delay to let speech finish
-}*/     
-        function scheduleMeeting() {
-    // Create custom modal
-    const modal = document.createElement('div');
-    modal.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-            <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px;">
-                <h3>Schedule a Meeting</h3>
-                <p>Would you like to schedule a 30-minute call with Deepanshu?</p>
-                <button id="scheduleYes" style="background: #007bff; color: white; padding: 10px 20px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">Yes, Schedule Now</button>
-                <button id="scheduleNo" style="background: #6c757d; color: white; padding: 10px 20px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    // Handle Yes button click (this will be a trusted user interaction)
-    document.getElementById('scheduleYes').onclick = function() {
-        document.body.removeChild(modal);
-        speakText("Great! Opening the scheduling interface for you.");
-        // This should work because it's triggered by a real button click
-        window.open('https://calendly.com/deepanshumalik0110/30min', '_blank');
-    };
-    
-    // Handle No button click
-    document.getElementById('scheduleNo').onclick = function() {
-        document.body.removeChild(modal);
-        speakText("No problem! Feel free to schedule anytime.");
-    };
-}
-
-        /*function sendMessage() {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-
-            if (name && email && message) {
-                // In a real implementation, this would send the message to a backend
-                alert(`Thank you ${name}! Your message has been sent. I'll get back to you soon at ${email}.`);
-                speakText(`Thank you ${name}! Your message has been received. I'll get back to you soon!`);
-                
-                // Clear form
-                document.getElementById('name').value = '';
-                document.getElementById('email').value = '';
-                document.getElementById('message').value = '';
-            } else {
-                alert('Please fill in all fields.');
-                speakText('Please fill in all the required fields in the contact form.');
-            }
-        }*/
-        function sendMessageWithFormSubmit() {
-
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-    
-            if (name && email && message) {
-
-        // Create a form dynamically
-            const form = document.createElement('form');
-            form.action = 'https://formsubmit.co/f81db7f1222bca0aae86e346aedc3365';
-            form.method = 'POST';
-            form.style.display = 'none';
-        
-        // Add form fields
-            const fields = [
-
-                { name: 'name', value: name },
-                { name: 'email', value: email },
-                { name: 'message', value: message },
-                { name: '_subject', value: 'New Contact Form Submission' },
-                { name: '_captcha', value: 'false' }, // Disable captcha
-                { name: '_next', value: window.location.href } // Redirect back to current page
-        ];
-        
-            fields.forEach(field => {
-
-
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = field.name;
-                input.value = field.value;
-                form.appendChild(input);
-        });
-        
-            document.body.appendChild(form);
-        
-        // Submit the form
-            form.submit();
-        
-        // Clean up
-            document.body.removeChild(form);
-        
-        // Clear original form
-            document.getElementById('name').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('message').value = '';
-        
-            alert(`Thank you ${name}! Your message has been sent. I'll get back to you soon at ${email}.`);
-            speakText(`Thank you ${name}! Your message has been received. I'll get back to you soon!`);
-        
-    } else {
-        alert('Please fill in all fields.');
-        speakText('Please fill in all the required fields in the contact form.');
-    }
-}
-
-        // Scroll Animations
-        function observeElements() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('slide-up');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.skill-card, .project-card').forEach(el => {
-                observer.observe(el);
-            });
-        }
-
-        // Voice Command Shortcuts
-        document.addEventListener('keydown', (e) => {
-            // Space bar to activate voice
-            if (e.code === 'Space' && e.ctrlKey) {
-                e.preventDefault();
-                startVoiceInteraction();
-            }
-            
-            // ESC to stop listening
-            if (e.code === 'Escape' && isListening) {
-                recognition.stop();
-            }
-        });
-
-        // Multi-language Support
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-            if (recognition) {
-                recognition.lang = lang;
-            }
-            
-            const messages = {
-                'en-US': 'Language changed to English',
-                'hi-IN': 'भाषा हिंदी में बदली गई',
-                'es-ES': 'Idioma cambiado a español'
-            };
-            
-            speakText(messages[lang] || messages['en-US']);
-        }
-
-        // Error Handling
-        window.addEventListener('error', (e) => {
-            console.error('Application error:', e.error);
-        });
-
-        // Performance Monitoring
-        window.addEventListener('load', () => {
-            console.log('Portfolio loaded successfully');
-            speakText('Welcome! Portfolio loaded and ready for interaction.');
-        });
-
-        // Permission and Notification Functions
-        function showPermissionModal() {
-            document.getElementById('permissionModal').style.display = 'flex';
-        }
-
-        function closePermissionModal() {
-            document.getElementById('permissionModal').style.display = 'none';
-        }
-
-        function retryVoicePermission() {
-            closePermissionModal();
-            showNotification("Trying voice recognition again...", 'info');
-            setTimeout(() => {
-                startVoiceInteraction();
-            }, 1000);
-        }
-
-        function useChatFallback() {
-            closePermissionModal();
-            showChatInterface();
-            showNotification("Text chat is ready! Ask me anything about Deepanshu's work.", 'success');
-        }
-
-        function showChatInterface() {
-            document.getElementById('chatFallback').style.display = 'flex';
-            document.getElementById('chatInput').focus();
-            
-            // Update AI avatar to show chat mode
-            const avatar = document.getElementById('aiAvatar');
-            const micIcon = avatar.querySelector('.mic-icon');
-            micIcon.textContent = '💬';
-            avatar.title = 'Text chat active';
-        }
-
-        function closeChatFallback() {
-            document.getElementById('chatFallback').style.display = 'none';
-            
-            // Reset AI avatar
-            const avatar = document.getElementById('aiAvatar');
-            const micIcon = avatar.querySelector('.mic-icon');
-            micIcon.textContent = '🎤';
-            avatar.title = 'Click to try voice chat';
-        }
-
-        function handleChatInput(event) {
-            if (event.key === 'Enter') {
-                const input = document.getElementById('chatInput');
-                const message = input.value.trim();
-                if (message) {
-                    addChatMessage(message, 'user');
-                    input.value = '';
-                    
-                    // Process the message
-                    setTimeout(() => {
-                        const response = findBestMatch(message.toLowerCase()) || 
-                            "I'm not sure about that. You can ask me about skills, projects, or schedule a meeting. Try asking 'What are your skills?' or 'Tell me about yourself'.";
-                        addChatMessage(response, 'ai');
-                        
-                        // Try to speak if possible, otherwise text is already shown
-                        speakText(response);
-                        
-                        // Handle special commands in chat
-                        handleChatCommands(message.toLowerCase());
-                    }, 500);
-                }
-            }
-        }
-
-        function addChatMessage(message, sender) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${sender}`;
-            messageDiv.textContent = message;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function handleChatCommands(message) {
-            // Handle navigation commands in chat
-            if (message.includes('download') && message.includes('resume')) {
-                downloadResume();
-            } else if (message.includes('book') || message.includes('schedule') || message.includes('meeting')) {
-                scheduleMeeting();
-            } else if (message.includes('go to') || message.includes('show me')) {
-                if (message.includes('about') || message.includes('skills')) {
-                    scrollToSection('about');
-                } else if (message.includes('projects') || message.includes('work')) {
-                    scrollToSection('projects');
-                } else if (message.includes('contact')) {
-                    scrollToSection('contact');
-                } else if (message.includes('meeting') || message.includes('avatar')) {
-                    scrollToSection('meeting');
-                }
-            }
-        }
-
-        function showNotification(message, type = 'info') {
-            // Remove existing notifications
-            const existingNotifications = document.querySelectorAll('.notification');
-            existingNotifications.forEach(n => n.remove());
-
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
-                <div>${message}</div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 5000);
-            
-            // Remove on click
-            notification.addEventListener('click', () => {
-                notification.remove();
-            });
-        }
-
-        // Enhanced AI Assistant Functions
-        function toggleVoiceAssistant() {
-            if (isListening) {
-                if (recognition) {
-                    recognition.stop();
-                }
-                showNotification("Voice listening stopped", 'info');
-            } else if (!isSpeaking) {
-                if (!voiceSupported || !recognition) {
-                    showChatInterface();
-                    showNotification("Using text chat - Voice features unavailable", 'info');
-                } else {
-                    startVoiceInteraction();
-                }
-            }
-        }
-
-        // Improved Speech Function with complete fallback handling
-        function speakText(text) {
-            // Always show text notification as primary method
-            showSpeechNotification(text);
-            
-            // Try speech synthesis as enhancement, but don't rely on it
-            if (!speechSupported || !synthesis) {
-                console.log('Speech synthesis not available, using text only');
-                return;
-            }
-            
-            try {
-                // Stop any current speech
-                synthesis.cancel();
-                
-                isSpeaking = true;
-                updateAIStatus('speaking');
-                
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.rate = 0.9;
-                utterance.pitch = 1;
-                utterance.volume = 0.8;
-                
-                // Set up error handling first
-                utterance.onerror = function(event) {
-                    console.log('Speech synthesis blocked or failed:', event.error);
-                    isSpeaking = false;
-                    updateAIStatus('ready');
-                    // Text notification already shown, so just continue silently
-                };
-                
-                utterance.onend = function() {
-                    isSpeaking = false;
-                    updateAIStatus('ready');
-                };
-                
-                // Try to set voice without waiting
-                const voices = synthesis.getVoices();
-                if (voices.length > 0) {
-                    const preferredVoice = voices.find(voice => 
-                        voice.lang.startsWith('en') && voice.default
-                    ) || voices[0];
-                    
-                    if (preferredVoice) {
-                        utterance.voice = preferredVoice;
-                    }
-                }
-                
-                // Attempt to speak - if it fails, the error handler will catch it
-                synthesis.speak(utterance);
-                
-            } catch (error) {
-                console.log('Speech synthesis setup failed:', error);
-                isSpeaking = false;
-                updateAIStatus('ready');
-                // Text notification already shown
-            }
-        }
-
-        function showSpeechNotification(text) {
-            // Create a special notification for AI responses
-            const notification = document.createElement('div');
-            notification.className = 'notification ai-response';
-            notification.innerHTML = `
-                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                    <div style="font-size: 1.2rem;">🤖</div>
-                    <div style="flex: 1;">${text}</div>
-                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Auto-remove after longer time for AI responses
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 8000);
-        }
-    </script>
 </body>
+
 </html>
