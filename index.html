@@ -4,21 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deepanshu Malik — AI Engineer · LLMs · Document Intelligence</title>
+    <title>Deepanshu Malik — AI Engineer · Interactive 3D Portfolio</title>
 
     <!-- SEO -->
     <meta name="description"
-        content="Portfolio of Deepanshu Malik — AI Engineer specialising in LLM systems, document intelligence, RAG pipelines, and full-stack development with FastAPI, React, and AWS.">
+        content="Walk through Deepanshu Malik's interactive 3D portfolio — AI Engineer specialising in LLM systems, document intelligence, RAG pipelines, and full-stack development.">
     <meta name="author" content="Deepanshu Malik">
     <meta name="keywords"
-        content="AI Engineer, LLM, RAG, Gemini, FastAPI, Python, React, Document Intelligence, Deepanshu Malik">
+        content="AI Engineer, LLM, RAG, Gemini, FastAPI, Python, React, Document Intelligence, Deepanshu Malik, 3D Portfolio">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Deepanshu Malik — AI Engineer & Full-Stack Developer">
+    <link rel="icon" href="assets/sprites/avatar.png" type="image/png">
+    <meta property="og:title" content="Deepanshu Malik — AI Engineer · 3D Portfolio">
     <meta property="og:description"
-        content="Production-ready GenAI systems • LLM Applications • Document Intelligence • RAG Chatbots">
+        content="An immersive 3D sketchbook portfolio — walk through my career in AI Engineering.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://deepanshumalik.dev">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
@@ -27,450 +33,306 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 
-<body class="dark-theme">
+<body>
 
-    <!-- ── Navigation ──────────────────────────────────────────────────────── -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">DM.AI</div>
+    <!-- ── 3D World Canvas ──────────────────────────────────────────────────── -->
+    <canvas id="world-canvas"></canvas>
 
-            <ul class="nav-links">
-                <li><a href="#home" class="nav-link active">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#experience" class="nav-link">Experience</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#meeting" class="nav-link">Meet Me</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
+    <!-- ── Scroll Driver (invisible tall div for scroll-based camera) ──────── -->
+    <div id="scroll-container"></div>
 
-            <div style="display:flex;align-items:center;gap:1rem;">
-                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">☀️</button>
-                <button class="hamburger" id="hamburger" aria-label="Open menu">
-                    <span></span><span></span><span></span>
-                </button>
+    <!-- ── Loading Screen ───────────────────────────────────────────────────── -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-sketch">
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="157" stroke-dashoffset="157" class="loading-circle"/>
+                </svg>
             </div>
-        </div>
-    </nav>
-
-    <!-- ── Welcome Modal ───────────────────────────────────────────────────── -->
-    <div class="welcome-modal" id="welcomeModal" role="dialog" aria-modal="true">
-        <div class="modal-content welcome-modal-content">
-
-            <!-- Animated orb -->
-            <div class="welcome-orb">
-                <div class="orb-ring"></div>
-                <div class="orb-inner">🤖</div>
-            </div>
-
-            <p class="welcome-eyebrow">AI-Powered Portfolio</p>
-            <h2 class="welcome-headline">Hello, I'm Deepanshu's<br>AI Assistant 👋</h2>
-            <p class="welcome-desc">I can guide you through this interactive portfolio — answering questions about
-                skills, projects, and experience via <strong>voice</strong> or <strong>text chat</strong>.</p>
-
-            <div class="welcome-features">
-                <div class="welcome-feature">🎤 Voice Commands</div>
-                <div class="welcome-feature">💬 Text Chat</div>
-                <div class="welcome-feature">🌐 3D Avatar</div>
-            </div>
-
-            <button class="btn btn-primary welcome-cta" onclick="startIntroduction()">
-                Start Experience &nbsp;→
-            </button>
-
-            <p class="welcome-skip" onclick="startIntroduction()">Skip intro</p>
+            <p class="loading-text" style="font-family:'Caveat',cursive;font-size:1.5rem;color:#333;">Opening sketchbook...</p>
         </div>
     </div>
 
-    <!-- ── Hero ────────────────────────────────────────────────────────────── -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <p class="hero-tagline">AI Engineer · LLMs · Document Intelligence · Full-Stack</p>
-            <h1>Deepanshu Malik</h1>
-            <p>Building production-ready GenAI systems that solve real-world problems</p>
+    <!-- ── Entry Prompt (Zone 0) ────────────────────────────────────────────── -->
+    <div class="entry-prompt" id="entryPrompt">
+        <strong>EXPLORER</strong>
+        <span>Scroll to enter the portfolio</span>
+    </div>
 
+    <!-- ── World Controls (top-right) ───────────────────────────────────────── -->
+    <div class="world-controls" id="worldControls">
+        <button id="btn-map" onclick="toggleMap()" title="Map" aria-label="Open map">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#333" stroke-width="1.5">
+                <line x1="2" y1="4" x2="16" y2="4"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="2" y1="14" x2="16" y2="14"/>
+            </svg>
+        </button>
+    </div>
 
-            <div class="cta-buttons">
-                <a href="#projects" class="btn btn-primary">View Projects</a>
-                <a href="#experience" class="btn btn-secondary">Work Experience</a>
-                <button class="btn btn-secondary" onclick="startVoiceInteraction()">🎤 Voice Chat</button>
+    <!-- ── Zone Labels (appear as you scroll) ───────────────────────────────── -->
+    <div class="zone-label" id="zoneLabel"></div>
+
+    <!-- ── Scroll Progress ──────────────────────────────────────────────────── -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- ── Content Panel: Projects (Zone 2 — THE LAB) ───────────────────────── -->
+    <div class="content-panel" id="panel-projects" data-zone="2">
+        <div class="panel-inner">
+            <div class="panel-header-sketch">
+                <div>
+                    <h2 class="panel-title">THE LAB</h2>
+                    <p class="panel-subtitle">Where ideas become intelligent systems</p>
+                </div>
+                <button class="sketch-btn exit-room-btn" onclick="exitRoom()">
+                    <span>&times;</span> Exit Room
+                </button>
             </div>
-        </div>
-    </section>
+            <div class="panel-cards">
 
-    <!-- ── About ───────────────────────────────────────────────────────────── -->
-    <section class="section" id="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="avatar-image">
-                        <div class="avatar-inner"></div>
+                <div class="sketch-card" id="project-1">
+                    <div class="sketch-card-header">
+                        <h3>⚡ Utility Bill AI Agent</h3>
+                        <span class="live-dot">● LIVE</span>
                     </div>
-                </div>
-                <div class="about-text">
-                    <p>I'm an <strong>AI Engineer</strong> specialising in <strong>LLM systems, document intelligence,
-                            and scalable ML platforms</strong>. I've built production-ready Generative AI applications
-                        that power real-world workflows — from automated solar proposal generation to social media
-                        content automation.</p>
-                    <br>
-                    <p>At <strong>Wattmonk Technologies</strong>, I engineered end-to-end AI pipelines using
-                        <strong>Gemini Vision/Text</strong>, achieving 85–95% structured data extraction accuracy across
-                        diverse utility bill formats, and reduced manual content creation effort by 80% with an LLM
-                        automation agent.
-                    </p>
-                    <br>
-                    <p>My technical foundation spans <strong>FastAPI, Docker, AWS, RAG architectures, Prompt
-                            Engineering, and full-stack development</strong> with React and Node.js. I hold
-                        certifications from AWS, Cisco, and Infosys, and I'm continuously pushing the frontier of
-                        applied AI.</p>
-                    <br>
-                    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-                        <button class="btn btn-primary" onclick="downloadResume()">📄 Download Resume</button>
-                        <a href="mailto:malikdeepanshu15@gmail.com" class="btn btn-secondary">✉️ Email Me</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ── Skills ──────────────────────────────────────────────────────────── -->
-    <section class="section" id="skills">
-        <div class="container">
-            <h2 class="section-title">Technical Skills</h2>
-            <div class="skills-grid">
-
-                <div class="skill-card">
-                    <div class="skill-icon">🧠</div>
-                    <h3>GenAI &amp; LLMs</h3>
-                    <p>Building intelligent pipelines with large language models and retrieval systems</p>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Gemini Vision/Text</span>
-                        <span class="skill-tag">RAG</span>
-                        <span class="skill-tag">Prompt Engineering</span>
-                        <span class="skill-tag">AI Agents</span>
-                        <span class="skill-tag">Pinecone</span>
-                    </div>
-                </div>
-
-                <div class="skill-card">
-                    <div class="skill-icon">📊</div>
-                    <h3>Machine Learning</h3>
-                    <p>Classical ML, model evaluation, explainability, and healthcare AI</p>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Scikit-learn</span>
-                        <span class="skill-tag">XGBoost</span>
-                        <span class="skill-tag">TabNet</span>
-                        <span class="skill-tag">Random Forest</span>
-                        <span class="skill-tag">SHAP / LIME</span>
-                    </div>
-                </div>
-
-                <div class="skill-card">
-                    <div class="skill-icon">⚙️</div>
-                    <h3>Backend</h3>
-                    <p>Scalable async APIs and microservices for AI-powered products</p>
-                    <div class="skill-tags">
-                        <span class="skill-tag">FastAPI</span>
-                        <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">Express.js</span>
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">REST APIs</span>
-                    </div>
-                </div>
-
-                <div class="skill-card">
-                    <div class="skill-icon">🎨</div>
-                    <h3>Frontend</h3>
-                    <p>Modern, responsive UIs with real-time AI integration</p>
-                    <div class="skill-tags">
-                        <span class="skill-tag">React.js</span>
-                        <span class="skill-tag">Next.js</span>
-                        <span class="skill-tag">Tailwind CSS</span>
-                        <span class="skill-tag">JavaScript</span>
-                    </div>
-                </div>
-
-                <div class="skill-card">
-                    <div class="skill-icon">☁️</div>
-                    <h3>Cloud &amp; DevOps</h3>
-                    <p>Containerised deployments and cloud infrastructure management</p>
-                    <div class="skill-tags">
-                        <span class="skill-tag">AWS (EC2, S3, IAM)</span>
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">Linux</span>
-                        <span class="skill-tag">CI/CD</span>
-                    </div>
-                </div>
-
-                <div class="skill-card">
-                    <div class="skill-icon">🗄️</div>
-                    <h3>Databases &amp; Tools</h3>
-                    <p>Data storage, versioning, and API testing workflows</p>
-                    <div class="skill-tags">
-                        <span class="skill-tag">MongoDB</span>
-                        <span class="skill-tag">MySQL</span>
-                        <span class="skill-tag">Git / GitHub</span>
-                        <span class="skill-tag">Postman</span>
-                        <span class="skill-tag">JWT</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ── Work Experience ─────────────────────────────────────────────────── -->
-    <section class="section" id="experience">
-        <div class="container">
-            <h2 class="section-title">Work Experience</h2>
-            <div class="work-grid">
-
-                <div class="work-card">
-                    <div class="work-header">
-                        <div>
-                            <div class="work-role">AI Engineer Intern</div>
-                            <div class="work-company">
-                                <a href="https://www.wattmonk.com" target="_blank" rel="noopener">Wattmonk
-                                    Technologies</a>
-                                &nbsp;· Ghaziabad, India (Remote)
-                            </div>
-                        </div>
-                        <span class="work-date">Oct 2025 – Jan 2026</span>
-                    </div>
-
-                    <div class="work-projects">
-
-                        <!-- Project 1 -->
-                        <div class="work-project">
-                            <div class="work-project-header">
-                                <span class="work-project-title">📱 Social Media Post Generation Agent</span>
-                                <a href="https://postmaker.framesense.ai" target="_blank" rel="noopener"
-                                    class="live-badge">● LIVE</a>
-                            </div>
-                            <ul class="work-bullets">
-                                <li>Engineered end-to-end LLM-powered automation system using Gemini 2.0 Flash, reducing
-                                    manual content creation effort by <strong>80%</strong>.</li>
-                                <li>Designed structured prompt orchestration workflows with validation pipelines and
-                                    response filtering for high-quality, consistent outputs.</li>
-                                <li>Developed React + Tailwind visual editor with real-time preview and AI-assisted
-                                    content refinement.</li>
-                                <li>Optimised API interactions, reducing response latency by <strong>25%</strong> and
-                                    improving token efficiency.</li>
-                            </ul>
-                        </div>
-
-                        <!-- Project 2 -->
-                        <div class="work-project">
-                            <div class="work-project-header">
-                                <span class="work-project-title">⚡ Utility Bill Agent — Document Intelligence + Solar
-                                    Proposal</span>
-                                <a href="https://solaragenthub.com" target="_blank" rel="noopener" class="live-badge">●
-                                    LIVE</a>
-                            </div>
-                            <ul class="work-bullets">
-                                <li>Engineered AI-powered document intelligence pipeline using Gemini Vision, achieving
-                                    <strong>85–95%</strong> structured data extraction accuracy across diverse utility
-                                    bill formats.
-                                </li>
-                                <li>Architected multi-stage fallback parsing (Vision + Regex + heuristic rules),
-                                    improving parsing success rate by <strong>40%</strong>.</li>
-                                <li>Integrated Nominatim and NREL PVWatts APIs to automate solar ROI modelling, energy
-                                    output estimation, and payback analysis.</li>
-                                <li>Designed scalable FastAPI + MongoDB backend with async task pipelines handling
-                                    <strong>100+ document requests/day</strong>.
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ── Projects ────────────────────────────────────────────────────────── -->
-    <section class="section" id="projects">
-        <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="projects-grid">
-
-                <!-- Project 1 -->
-                <div class="project-card">
-                    <h3>⚡ Utility Bill AI Agent <span class="live-badge">● LIVE</span></h3>
                     <p>AI-powered document intelligence pipeline extracting structured data from utility bills with
-                        85–95% accuracy, auto-generating solar ROI proposals with payback analysis via NREL PVWatts API.
-                    </p>
-                    <div class="project-tech">
-                        <span>Gemini
-                            Vision</span><span>FastAPI</span><span>MongoDB</span><span>Docker</span><span>AWS</span><span>Nominatim</span><span>NREL
-                            PVWatts</span>
+                        85–95% accuracy, auto-generating solar ROI proposals via NREL PVWatts API.</p>
+                    <div class="sketch-tags">
+                        <span>Gemini Vision</span><span>FastAPI</span><span>MongoDB</span><span>Docker</span><span>AWS</span>
                     </div>
-                    <div class="project-links">
-                        <a href="https://solaragenthub.com" target="_blank" rel="noopener"
-                            class="project-link-btn btn-live">🔗 Live Demo</a>
-                        <a href="https://github.com/deepanshuj18/utility-bill-agent" target="_blank" rel="noopener"
-                            class="project-link-btn btn-github">⭐ GitHub</a>
+                    <div class="sketch-links">
+                        <a href="https://solaragenthub.com" target="_blank" rel="noopener">🔗 Live Demo</a>
+                        <a href="https://github.com/deepanshuj18/utility-bill-agent" target="_blank" rel="noopener">⭐ GitHub</a>
                     </div>
                 </div>
 
-                <!-- Project 2 -->
-                <div class="project-card">
-                    <h3>🤖 AI-Powered RAG Chatbot</h3>
+                <div class="sketch-card" id="project-2">
+                    <div class="sketch-card-header">
+                        <h3>🤖 AI-Powered RAG Chatbot</h3>
+                    </div>
                     <p>End-to-end Retrieval-Augmented Generation system enabling contextual Q&amp;A over PDF documents.
-                        Gemini embeddings + Pinecone vector search for semantic retrieval with a scalable FastAPI
-                        backend.</p>
-                    <div class="project-tech">
-                        <span>FastAPI</span><span>Gemini
-                            API</span><span>Pinecone</span><span>PyPDF2</span><span>Python</span>
+                        Gemini embeddings + Pinecone vector search.</p>
+                    <div class="sketch-tags">
+                        <span>FastAPI</span><span>Gemini API</span><span>Pinecone</span><span>Python</span>
                     </div>
-                    <div class="project-links">
-                        <a href="https://github.com/deepanshuj18/Rag-chatbot-0" target="_blank" rel="noopener"
-                            class="project-link-btn btn-github">⭐ GitHub</a>
+                    <div class="sketch-links">
+                        <a href="https://github.com/deepanshuj18/Rag-chatbot-0" target="_blank" rel="noopener">⭐ GitHub</a>
                     </div>
                 </div>
 
-                <!-- Project 3 -->
-                <div class="project-card">
-                    <h3>🩺 WBC Diagnostic System v2.0</h3>
-                    <p>Full-stack ML healthcare platform for breast cancer prediction using TabNet + MAE. Applied
-                        SHAP/LIME explainability, cross-validation, hyperparameter tuning, and ROC-AUC evaluation.
-                        Containerised with Docker + JWT security.</p>
-                    <div class="project-tech">
-                        <span>TabNet</span><span>FastAPI</span><span>React</span><span>Node.js</span><span>MongoDB</span><span>Docker</span><span>SHAP</span><span>LIME</span>
+                <div class="sketch-card" id="project-3">
+                    <div class="sketch-card-header">
+                        <h3>🩺 WBC Diagnostic System v2.0</h3>
                     </div>
-                    <div class="project-links">
-                        <a href="https://github.com/deepanshuj18/wbc-diagnostic-system" target="_blank" rel="noopener"
-                            class="project-link-btn btn-github">⭐ GitHub</a>
+                    <p>Full-stack ML healthcare platform for breast cancer prediction using TabNet + MAE. SHAP/LIME
+                        explainability, cross-validation, and Docker deployment.</p>
+                    <div class="sketch-tags">
+                        <span>TabNet</span><span>FastAPI</span><span>React</span><span>SHAP</span><span>Docker</span>
+                    </div>
+                    <div class="sketch-links">
+                        <a href="https://github.com/deepanshuj18/wbc-diagnostic-system" target="_blank" rel="noopener">⭐ GitHub</a>
                     </div>
                 </div>
 
-                <!-- Project 4 -->
-                <div class="project-card">
-                    <h3>📱 Social Media Post Generation Agent <span class="live-badge">● LIVE</span></h3>
-                    <p>LLM-powered automation system that generates brand-consistent social media content. Structured
-                        prompt orchestration + validation pipeline + React visual editor with real-time AI-assisted
-                        refinement.</p>
-                    <div class="project-tech">
-                        <span>Gemini 2.0 Flash</span><span>FastAPI</span><span>React</span><span>Tailwind
-                            CSS</span><span>Prompt Engineering</span>
+                <div class="sketch-card" id="project-4">
+                    <div class="sketch-card-header">
+                        <h3>📱 Social Media Post Agent</h3>
+                        <span class="live-dot">● LIVE</span>
                     </div>
-                    <div class="project-links">
-                        <a href="https://postmaker.framesense.ai" target="_blank" rel="noopener"
-                            class="project-link-btn btn-live">🔗 Live Demo</a>
+                    <p>LLM-powered automation for brand-consistent social media content. Structured prompt orchestration
+                        + validation pipeline + React visual editor.</p>
+                    <div class="sketch-tags">
+                        <span>Gemini 2.0</span><span>FastAPI</span><span>React</span><span>Tailwind</span>
+                    </div>
+                    <div class="sketch-links">
+                        <a href="https://postmaker.framesense.ai" target="_blank" rel="noopener">🔗 Live Demo</a>
                     </div>
                 </div>
 
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ── Virtual Meeting ──────────────────────────────────────────────────── -->
-    <section class="section" id="meeting">
-        <div class="container">
-            <h2 class="section-title">Meet My Digital Twin</h2>
-            <p style="text-align:center;font-size:1.2rem;margin-bottom:2rem;opacity:0.85;">
-                Interact with my 3D avatar and schedule a meeting!
-            </p>
-            <div class="meeting-room">
-                <div id="three-container"></div>
-                <div class="meeting-controls">
-                    <button class="btn btn-primary" onclick="talkToAvatar()">🗣️ Talk to Avatar</button>
-                    <button class="btn btn-secondary" onclick="scheduleMeeting()">📅 Schedule Meeting</button>
+    <!-- ── Content Panel: Skills & Experience (Zone 3 — THE STUDIO) ──────────── -->
+    <div class="content-panel" id="panel-skills" data-zone="3">
+        <div class="panel-inner">
+            <div class="panel-header-sketch">
+                <div>
+                    <h2 class="panel-title">THE STUDIO</h2>
+                    <p class="panel-subtitle">My tools, skills, and professional journey</p>
+                </div>
+                <button class="sketch-btn exit-room-btn" onclick="exitRoom()">
+                    <span>&times;</span> Exit Room
+                </button>
+            </div>
+
+            <!-- Work Experience -->
+            <div class="sketch-card work-exp-card" id="work-exp">
+                <h3>💼 AI Engineer Intern — <a href="https://www.wattmonk.com" target="_blank" rel="noopener">Wattmonk Technologies</a></h3>
+                <span class="work-period">Oct 2025 – Jan 2026 · Ghaziabad (Remote)</span>
+                <ul class="work-items">
+                    <li>Built Utility Bill AI pipeline with Gemini Vision — <strong>85–95%</strong> extraction accuracy</li>
+                    <li>Social Media Post Agent — reduced manual content creation by <strong>80%</strong></li>
+                    <li>Multi-stage fallback parsing improved success rate by <strong>40%</strong></li>
+                    <li>Scalable FastAPI + MongoDB backend handling <strong>100+ docs/day</strong></li>
+                </ul>
+            </div>
+
+            <!-- Skills Grid -->
+            <div class="skills-sketch-grid">
+                <div class="skill-bubble">
+                    <strong>🧠 GenAI & LLMs</strong>
+                    <div class="sketch-tags"><span>Gemini</span><span>RAG</span><span>Prompt Eng.</span><span>AI Agents</span><span>Pinecone</span></div>
+                </div>
+                <div class="skill-bubble">
+                    <strong>📊 Machine Learning</strong>
+                    <div class="sketch-tags"><span>Scikit-learn</span><span>XGBoost</span><span>TabNet</span><span>SHAP</span><span>LIME</span></div>
+                </div>
+                <div class="skill-bubble">
+                    <strong>⚙️ Backend</strong>
+                    <div class="sketch-tags"><span>FastAPI</span><span>Node.js</span><span>Express</span><span>Python</span><span>REST</span></div>
+                </div>
+                <div class="skill-bubble">
+                    <strong>🎨 Frontend</strong>
+                    <div class="sketch-tags"><span>React</span><span>Next.js</span><span>Tailwind</span><span>JavaScript</span></div>
+                </div>
+                <div class="skill-bubble">
+                    <strong>☁️ Cloud & DevOps</strong>
+                    <div class="sketch-tags"><span>AWS</span><span>Docker</span><span>Linux</span><span>CI/CD</span></div>
+                </div>
+                <div class="skill-bubble">
+                    <strong>🗄️ Databases</strong>
+                    <div class="sketch-tags"><span>MongoDB</span><span>MySQL</span><span>Git</span><span>Postman</span></div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ── Certifications ──────────────────────────────────────────────────── -->
-    <section class="section" id="certifications" style="min-height:auto;padding:3rem 2rem;">
-        <div class="container">
-            <h2 class="section-title" style="font-size:2rem;margin-bottom:2rem;">Certifications &amp; Achievements</h2>
-            <div class="cert-grid">
-                <div class="cert-badge">🏆 AWS Cloud Practitioner</div>
-                <div class="cert-badge">🌐 Linux Essentials — Cisco</div>
-                <div class="cert-badge">🤖 Generative AI — Infosys 2025</div>
-                <div class="cert-badge">📊 AI / ML — Infosys</div>
-                <div class="cert-badge">🏅 Winner — Kabaddi Tournament</div>
-                <div class="cert-badge">🥈 Finalist — College Hackathon 2024</div>
-                <div class="cert-badge">👨‍💻 Led 3-member team · Real-time Chat App</div>
+    <!-- ── Content Panel: About (Zone 4) ────────────────────────────────────── -->
+    <div class="content-panel" id="panel-about" data-zone="4">
+        <div class="panel-inner">
+            <h2 class="panel-title">About</h2>
+
+            <div class="about-sketch">
+                <p>I'm an <strong>AI Engineer</strong> specialising in <strong>LLM systems, document intelligence,
+                    and scalable ML platforms</strong>. I've built production-ready Generative AI applications
+                    that power real-world workflows — from automated solar proposal generation to social media
+                    content automation.</p>
+                <br>
+                <p>At <strong>Wattmonk Technologies</strong>, I engineered end-to-end AI pipelines using
+                    <strong>Gemini Vision/Text</strong>, achieving 85–95% structured data extraction accuracy across
+                    diverse utility bill formats.</p>
+                <br>
+                <p>My foundation spans <strong>FastAPI, Docker, AWS, RAG architectures, Prompt Engineering,
+                    and full-stack development</strong> with React and Node.js.</p>
+            </div>
+
+            <!-- Certifications -->
+            <div class="cert-sketch-grid">
+                <span class="cert-pill">🏆 AWS Cloud Practitioner</span>
+                <span class="cert-pill">🌐 Linux Essentials — Cisco</span>
+                <span class="cert-pill">🤖 Generative AI — Infosys 2025</span>
+                <span class="cert-pill">📊 AI / ML — Infosys</span>
+                <span class="cert-pill">🏅 Kabaddi Tournament Winner</span>
+                <span class="cert-pill">🥈 College Hackathon 2024 Finalist</span>
+            </div>
+
+            <div style="margin-top:1.5rem;">
+                <button class="sketch-btn" onclick="downloadResume()">📄 Download Resume</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ── Contact ──────────────────────────────────────────────────────────── -->
-    <section class="section" id="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-layout">
+    <!-- ── Content Panel: Contact (Zone 5 — THE DOCK) ───────────────────────── -->
+    <div class="content-panel" id="panel-contact" data-zone="5">
+        <div class="panel-inner">
+            <h2 class="panel-title">Contact</h2>
+            <p class="panel-subtitle">Send a message in a bottle 🍶</p>
 
-                <!-- Left — contact info + social -->
-                <div class="contact-info-panel">
-                    <div class="contact-detail">
-                        <div class="contact-detail-icon">✉️</div>
-                        <div>
-                            <div class="contact-detail-label">Email</div>
-                            <div class="contact-detail-text">
-                                <a href="mailto:malikdeepanshu15@gmail.com">malikdeepanshu15@gmail.com</a>
-                            </div>
-                        </div>
+            <div class="contact-sketch-layout">
+                <!-- Contact Info -->
+                <div class="contact-info-sketch">
+                    <div class="contact-item">
+                        <span>✉️</span>
+                        <a href="mailto:malikdeepanshu15@gmail.com">malikdeepanshu15@gmail.com</a>
                     </div>
-                    <div class="contact-detail">
-                        <div class="contact-detail-icon">📱</div>
-                        <div>
-                            <div class="contact-detail-label">Phone</div>
-                            <div class="contact-detail-text">
-                                <a href="tel:+919220922230">+91 9220922230</a>
-                            </div>
-                        </div>
+                    <div class="contact-item">
+                        <span>📱</span>
+                        <a href="tel:+919220922230">+91 9220922230</a>
                     </div>
-                    <div class="contact-detail">
-                        <div class="contact-detail-icon">📍</div>
-                        <div>
-                            <div class="contact-detail-label">Location</div>
-                            <div class="contact-detail-text">
-                                <span>Noida, India</span>
-                            </div>
-                        </div>
+                    <div class="contact-item">
+                        <span>📍</span>
+                        <span>Noida, India</span>
                     </div>
-
-                    <!-- Social links -->
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/deepanshu-malik-6b3543261/" target="_blank" rel="noopener"
-                            class="social-btn">
-                            💼 LinkedIn
-                        </a>
-                        <a href="https://github.com/deepanshuj18" target="_blank" rel="noopener" class="social-btn">
-                            🐙 GitHub
-                        </a>
-                        <a href="https://www.hackerrank.com/profile/malikdeepanshu15" target="_blank" rel="noopener"
-                            class="social-btn">
-                            💻 HackerRank
-                        </a>
+                    <div class="contact-socials">
+                        <a href="https://www.linkedin.com/in/deepanshu-malik-6b3543261/" target="_blank" rel="noopener" class="social-sketch-btn">💼 LinkedIn</a>
+                        <a href="https://github.com/deepanshuj18" target="_blank" rel="noopener" class="social-sketch-btn">🐙 GitHub</a>
+                        <a href="https://www.hackerrank.com/profile/malikdeepanshu15" target="_blank" rel="noopener" class="social-sketch-btn">💻 HackerRank</a>
                     </div>
                 </div>
 
-                <!-- Right — message form -->
-                <div class="contact-form">
-                    <div class="form-group">
+                <!-- Contact Form -->
+                <div class="contact-form-sketch">
+                    <div class="form-group-sketch">
                         <label for="name">Name</label>
                         <input type="text" id="name" placeholder="Your Name" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group-sketch">
                         <label for="email">Email</label>
                         <input type="email" id="email" placeholder="your.email@example.com" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group-sketch">
                         <label for="message">Message</label>
-                        <textarea id="message" rows="5" placeholder="Your message…" required></textarea>
+                        <textarea id="message" rows="4" placeholder="Your message…" required></textarea>
                     </div>
-                    <button class="btn btn-primary" onclick="sendMessageWithFormSubmit()">Send Message</button>
+                    <button class="sketch-btn" onclick="sendMessageWithFormSubmit()">Send Message →</button>
                 </div>
-
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- ── Door Tooltip ──────────────────────────────────────────────────────── -->
+    <div id="door-tooltip" class="door-tooltip"></div>
+
+    <!-- ── Map Overlay ──────────────────────────────────────────────────────── -->
+    <div class="map-overlay" id="mapOverlay">
+        <div class="map-paper">
+            <div class="map-header">
+                <h3>MAP</h3>
+                <button class="map-close" onclick="closeMap()">×</button>
+            </div>
+            <div class="map-content">
+                <div class="map-node" data-target="0" onclick="navigateToZone(0)">
+                    <div class="map-icon">🚪</div>
+                    <span>Entrance</span>
+                </div>
+                <div class="map-line"></div>
+                <div class="map-node" data-target="1" onclick="navigateToZone(1)">
+                    <div class="map-icon">👋</div>
+                    <span>Hello</span>
+                </div>
+                <div class="map-line"></div>
+                <div class="map-node" data-target="2" onclick="navigateToZone(2)">
+                    <div class="map-icon">🔬</div>
+                    <span>The Lab</span>
+                </div>
+                <div class="map-line"></div>
+                <div class="map-node" data-target="3" onclick="navigateToZone(3)">
+                    <div class="map-icon">🛠️</div>
+                    <span>The Studio</span>
+                </div>
+                <div class="map-line"></div>
+                <div class="map-node" data-target="4" onclick="navigateToZone(4)">
+                    <div class="map-icon">✈️</div>
+                    <span>About</span>
+                </div>
+                <div class="map-line"></div>
+                <div class="map-node" data-target="5" onclick="navigateToZone(5)">
+                    <div class="map-icon">⚓</div>
+                    <span>Contact</span>
+                </div>
+                <div class="map-pin" id="mapPin">📍</div>
+            </div>
+        </div>
+    </div>
 
     <!-- ── AI Assistant (floating) ─────────────────────────────────────────── -->
     <div class="ai-assistant">
@@ -505,9 +367,9 @@
                 </ol>
             </div>
             <div style="display:flex;gap:1rem;justify-content:center;margin-top:2rem;">
-                <button class="btn btn-primary" onclick="retryVoicePermission()">Try Again</button>
-                <button class="btn btn-secondary" onclick="useChatFallback()">Use Text Chat</button>
-                <button class="btn btn-secondary" onclick="closePermissionModal()">Close</button>
+                <button class="sketch-btn" onclick="retryVoicePermission()">Try Again</button>
+                <button class="sketch-btn outline" onclick="useChatFallback()">Use Text Chat</button>
+                <button class="sketch-btn outline" onclick="closePermissionModal()">Close</button>
             </div>
         </div>
     </div>
@@ -517,7 +379,7 @@
         <div class="chat-header">
             <span>💬 AI Assistant</span>
             <button onclick="closeChatFallback()"
-                style="background:none;border:none;color:white;cursor:pointer;font-size:1.2rem;">✕</button>
+                style="background:none;border:none;color:#333;cursor:pointer;font-size:1.2rem;">✕</button>
         </div>
         <div class="chat-messages" id="chatMessages">
             <div class="chat-message ai">Hi! Ask me about Deepanshu's skills, projects, or experience!</div>
