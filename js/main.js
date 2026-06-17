@@ -173,8 +173,23 @@ function buildWorld() {
         }
     });
     bTex.wrapS = bTex.wrapT = THREE.RepeatWrapping; bTex.repeat.set(4, 2);
-    const extWall = new THREE.Mesh(new THREE.PlaneGeometry(40, 15), new THREE.MeshBasicMaterial({ map: bTex }));
-    extWall.position.set(0, 5, CORRIDOR_START_Z);
+    const extShape = new THREE.Shape();
+    extShape.moveTo(-20, -2.5);
+    extShape.lineTo(20, -2.5);
+    extShape.lineTo(20, 12.5);
+    extShape.lineTo(-20, 12.5);
+    extShape.lineTo(-20, -2.5);
+
+    const extHole = new THREE.Path();
+    extHole.moveTo(-1.25, 0);
+    extHole.lineTo(-1.25, 4);
+    extHole.lineTo(1.25, 4);
+    extHole.lineTo(1.25, 0);
+    extHole.lineTo(-1.25, 0);
+    extShape.holes.push(extHole);
+
+    const extWall = new THREE.Mesh(new THREE.ShapeGeometry(extShape), new THREE.MeshBasicMaterial({ map: bTex }));
+    extWall.position.set(0, 0, CORRIDOR_START_Z);
     extWall.renderOrder = 0; // render wall behind doors
     scene.add(extWall);
 
@@ -195,9 +210,58 @@ function buildWorld() {
     const corrMidZ = (CORRIDOR_START_Z + CORRIDOR_END_Z) / 2;
 
     // Left wall
-    makeWall(-CORRIDOR_HALF_W, ROOM_HEIGHT / 2, corrMidZ, corrLen, ROOM_HEIGHT, Math.PI / 2);
+    const leftShape = new THREE.Shape();
+    leftShape.moveTo(CORRIDOR_END_Z, 0);
+    leftShape.lineTo(CORRIDOR_START_Z, 0);
+    leftShape.lineTo(CORRIDOR_START_Z, ROOM_HEIGHT);
+    leftShape.lineTo(CORRIDOR_END_Z, ROOM_HEIGHT);
+    leftShape.lineTo(CORRIDOR_END_Z, 0);
+
+    ROOMS.forEach(room => {
+        if (room.side === 'left') {
+            const hole = new THREE.Path();
+            hole.moveTo(room.z - 1.25, 0);
+            hole.lineTo(room.z - 1.25, 4);
+            hole.lineTo(room.z + 1.25, 4);
+            hole.lineTo(room.z + 1.25, 0);
+            hole.lineTo(room.z - 1.25, 0);
+            leftShape.holes.push(hole);
+        }
+    });
+
+    const leftGeo = new THREE.ShapeGeometry(leftShape);
+    const leftMat = new THREE.MeshBasicMaterial({ color: 0xf0eeea, side: THREE.DoubleSide });
+    const leftMesh = new THREE.Mesh(leftGeo, leftMat);
+    leftMesh.rotation.y = -Math.PI / 2;
+    leftMesh.position.set(-CORRIDOR_HALF_W, 0, 0);
+    scene.add(leftMesh);
+
     // Right wall
-    makeWall(CORRIDOR_HALF_W, ROOM_HEIGHT / 2, corrMidZ, corrLen, ROOM_HEIGHT, -Math.PI / 2);
+    const rightShape = new THREE.Shape();
+    rightShape.moveTo(CORRIDOR_END_Z, 0);
+    rightShape.lineTo(CORRIDOR_START_Z, 0);
+    rightShape.lineTo(CORRIDOR_START_Z, ROOM_HEIGHT);
+    rightShape.lineTo(CORRIDOR_END_Z, ROOM_HEIGHT);
+    rightShape.lineTo(CORRIDOR_END_Z, 0);
+
+    ROOMS.forEach(room => {
+        if (room.side === 'right') {
+            const hole = new THREE.Path();
+            hole.moveTo(room.z - 1.25, 0);
+            hole.lineTo(room.z - 1.25, 4);
+            hole.lineTo(room.z + 1.25, 4);
+            hole.lineTo(room.z + 1.25, 0);
+            hole.lineTo(room.z - 1.25, 0);
+            rightShape.holes.push(hole);
+        }
+    });
+
+    const rightGeo = new THREE.ShapeGeometry(rightShape);
+    const rightMat = new THREE.MeshBasicMaterial({ color: 0xf0eeea, side: THREE.DoubleSide });
+    const rightMesh = new THREE.Mesh(rightGeo, rightMat);
+    rightMesh.rotation.y = -Math.PI / 2;
+    rightMesh.position.set(CORRIDOR_HALF_W, 0, 0);
+    scene.add(rightMesh);
     // Ceiling
     makeCeiling(0, corrMidZ, CORRIDOR_HALF_W * 2, corrLen);
 
@@ -376,15 +440,9 @@ function applyCameraTransform() {
 }
 
 // ─── 6. Mouse & Trackpad Look ─────────────────────────────────────────────────
-let isDragging = false;
-let dragStartX = 0;
-let dragStartYaw = 0;
 
 function onMouseDown(e) {
-    if (isInsideRoom || lerpingCamera) return;
-    isDragging = true;
-    dragStartX = e.clientX;
-    dragStartYaw = targetCameraYaw;
+    // No longer needed for drag-to-look
 }
 
 function onMouseMove(e) {
@@ -393,24 +451,16 @@ function onMouseMove(e) {
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     window.screenMouseX = e.clientX;
     window.screenMouseY = e.clientY;
-
-    if (isInsideRoom || lerpingCamera) return;
-
-    if (isDragging) {
-        const dx = e.clientX - dragStartX;
-        const maxYaw = Math.PI * 0.40;
-        targetCameraYaw = Math.max(-maxYaw, Math.min(maxYaw, dragStartYaw + dx * 0.003));
-    }
 }
 
 function onMouseUp() {
-    isDragging = false;
+    // No longer needed
 }
 
 function onWheel(e) {
     if (isInsideRoom || lerpingCamera) return;
     
-    // If scrolling horizontally more than vertically, treat as look left/right
+    // 2-finger scroll horizontally to look left/right
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
         e.preventDefault(); // Prevent browser back/forward swipe navigation
         targetCameraYaw -= e.deltaX * 0.002;
@@ -781,7 +831,7 @@ setupVoiceRecognition();
 function createQuoteFrames() {
     const quotes = [
         {
-            z: -10, side: 'left', image: 'assets/sprites/cityscape.png',
+            z: -60, side: 'left', image: 'assets/sprites/cityscape.png',
             quote: "The best way to predict the future is to invent it.", author: "Alan Kay"
         },
         {
